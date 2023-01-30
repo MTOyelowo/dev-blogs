@@ -4,28 +4,23 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
-import InfiniteScrollPosts from "../components/common/InfiniteScrollPosts";
-import DefaultLayout from "../components/layout/DefaultLayout";
-import { formatPosts, readPostsFromDb } from "../lib/utils";
-import { filterPosts } from "../utils/helper";
-import { PostDetail, UserProfile } from "../utils/types";
+import ConfirmModal from "../../../components/common/ConfirmModal";
+import InfiniteScrollPosts from "../../../components/common/InfiniteScrollPosts";
+import PostCard from "../../../components/common/PostCard";
+import AdminLayout from "../../../components/layout/AdminLayout";
+import { formatPosts, readPostsFromDb } from "../../../lib/utils";
+import { filterPosts } from "../../../utils/helper";
+import { PostDetail } from "../../../utils/types";
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 let pageNo = 0;
 const limit = 9;
 
-const Home: NextPage<Props> = ({ posts }) => {
+const Posts: NextPage<Props> = ({ posts }) => {
   const [postsToRender, setPostsToRender] = useState(posts);
   const [hasMorePosts, setHasMorePosts] = useState(posts.length >= limit);
-
-  const { data } = useSession();
-
-  const profile = data?.user as UserProfile;
-
-  const isAdmin = profile && profile.role === "admin";
 
   const fetchMorePosts = async () => {
     try {
@@ -42,20 +37,21 @@ const Home: NextPage<Props> = ({ posts }) => {
       console.log(error);
     }
   };
-
   return (
-    <DefaultLayout>
-      <div className="pb-20">
+    <>
+      <AdminLayout>
         <InfiniteScrollPosts
           hasMore={hasMorePosts}
           next={fetchMorePosts}
           dataLength={postsToRender.length}
           posts={postsToRender}
-          showControls={isAdmin}
-          onPostRemoved={(post) => setPostsToRender(filterPosts(posts, post))}
+          showControls
+          onPostRemoved={(post) =>
+            setPostsToRender(filterPosts(postsToRender, post))
+          }
         />
-      </div>
-    </DefaultLayout>
+      </AdminLayout>
+    </>
   );
 };
 
@@ -80,4 +76,4 @@ export const getServerSideProps: GetServerSideProps<
   }
 };
 
-export default Home;
+export default Posts;
