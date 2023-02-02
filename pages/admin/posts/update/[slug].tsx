@@ -24,7 +24,7 @@ const Update: NextPage<Props> = ({ post }) => {
 
       // submit post
       const { data } = await axios.patch("/api/posts/" + post.id, formData);
-      console.log(data);
+      //console.log(data);
     } catch (error: any) {
       console.log(error.response.data);
     }

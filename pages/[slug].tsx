@@ -10,14 +10,15 @@ import dbConnect from "../lib/dbConnect";
 import Post from "../models/Post";
 import Image from "next/image";
 import dateFormat from "dateformat";
+import Comments from "../components/common/Comments";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 const SinglePost: NextPage<Props> = ({ post }) => {
-  const { title, content, tags, meta, slug, thumbnail, createdAt } = post;
+  const { id, title, content, tags, meta, slug, thumbnail, createdAt } = post;
   return (
     <DefaultLayout title={title} desc={meta}>
-      <div className="pb-20 mx-2">
+      <div className="mx-2">
         {thumbnail ? (
           <div className="relative aspect-video">
             {<Image src={thumbnail} alt={title} fill />}
@@ -40,6 +41,8 @@ const SinglePost: NextPage<Props> = ({ post }) => {
         <div className="prose prose-lg dark:prose-invert max-w-full mx-auto">
           {parse(content)}
         </div>
+
+        <Comments belongsTo={id} />
       </div>
     </DefaultLayout>
   );

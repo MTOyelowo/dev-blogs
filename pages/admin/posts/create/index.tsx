@@ -21,7 +21,7 @@ const Create: NextPage<Props> = () => {
       // submit post
       const { data } = await axios.post("/api/posts", formData);
       router.push("/admin/posts/update/" + data.post.slug);
-      console.log(data);
+      // console.log(data);
     } catch (error: any) {
       console.log(error.response.data);
     }

@@ -34,7 +34,7 @@ const Posts: NextPage<Props> = ({ posts }) => {
       } else setPostsToRender([...postsToRender, ...data.posts]);
     } catch (error) {
       setHasMorePosts(false);
-      console.log(error);
+      //console.log(error);
     }
   };
   return (

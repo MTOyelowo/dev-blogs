@@ -29,7 +29,7 @@ const AdminSecondaryNav: FC<Props> = (props): JSX.Element => {
     },
   ];
   return (
-    <div className="flex items-center justify-between">
+    <div className="bg-white dark:bg-primary-dark py-3 flex items-center justify-between">
       {/*Search Bar*/}
       <SearchBar />
       {/*Options / Profile Head*/}

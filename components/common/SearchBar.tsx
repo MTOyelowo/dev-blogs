@@ -7,7 +7,7 @@ const SearchBar: FC<Props> = (props): JSX.Element => {
     <input
       type="text"
       placeholder="Search..."
-      className="border-[1.5px] bg-transparent border-secondary-dark rounded-lg text-primary-dark dark:text-primary p-1 focus:border-primary-dark dark:focus:border-primary outline-none transition"
+      className=" bg-gray-300 rounded-full border-secondary-dark text-primary-dark dark:text-primary p-1 px-2 focus:border-primary-dark dark:focus:border-primary outline-none transition"
     />
   );
 };

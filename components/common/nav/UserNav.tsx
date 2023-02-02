@@ -32,10 +32,6 @@ const UserNav: FC<Props> = (props): JSX.Element => {
 
   const { toggleTheme } = useDarkMode();
 
-  const handleLoginWithGithub = async () => {
-    await signIn("github");
-  };
-
   const dropDownOptions: dropDownOptions = isAdmin
     ? [
         {
@@ -69,7 +65,7 @@ const UserNav: FC<Props> = (props): JSX.Element => {
             head={<ProfileHead nameInitial="M" lightOnly />}
           />
         ) : (
-          <GitHubAuthButton lightOnly onClick={handleLoginWithGithub} />
+          <GitHubAuthButton lightOnly />
         )}
       </div>
     </div>
