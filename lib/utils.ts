@@ -25,7 +25,7 @@ export const readFile = <T extends object>(req: NextApiRequest): Promise<Formida
 };
 
 export const readPostsFromDb = async (limit: number, pageNo: number, skip?: number) => {
-    if (!limit || limit > 10) throw Error("Please use a limity under 10 and a valid page number")
+    if (!limit || limit > 10) throw Error("Please use a limit under 10 and a valid page number")
     const finalSkip = skip || limit * pageNo;
     await dbConnect()
     const posts = await Post.find()

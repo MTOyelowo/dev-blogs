@@ -23,6 +23,7 @@ const removePost: NextApiHandler = async (req, res) => {
     try {
         const admin = await isAdmin(req, res);
         if (!admin) return res.status(401).json({ error: "Unauthorized Request!" })
+
         const postId = req.query.postId as string;
 
         const post = await Post.findByIdAndDelete(postId)

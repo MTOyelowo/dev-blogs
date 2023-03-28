@@ -5,6 +5,7 @@ import { formatComment, isAuth } from "../../../lib/utils";
 import { commentValidationSchema, validateSchema } from "../../../lib/validator";
 import Comment from "../../../models/Comment";
 import Post from "../../../models/Post";
+import { CommentResponse } from "../../../utils/types";
 
 const handler: NextApiHandler = (req, res) => {
     const { method } = req
@@ -47,7 +48,7 @@ const readComments: NextApiHandler = async (req, res) => {
         })
 
     if (!comments) return res.json({ comment: comments });
-    const formattedComment = comments.map((comment) => ({
+    const formattedComment: CommentResponse[] = comments.map((comment) => ({
         ...formatComment(comment, user),
         replies: comment.replies?.map((c: any) => formatComment(c, user)),
     }));
