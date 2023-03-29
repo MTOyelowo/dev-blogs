@@ -22,9 +22,11 @@ const readComments: NextApiHandler = async (req, res) => {
     const { limit = "5", pageNo = "0" } = req.query as { limit: string, pageNo: string }
 
     const comments = await Comment.find({})
-        .limit(parseInt(limit)).
-        skip(parseInt(limit) * parseInt(pageNo))
-        .populate("owner").populate({
+        .limit(parseInt(limit))
+        .skip(parseInt(limit) * parseInt(pageNo))
+        .sort({ createdAt: "desc" })
+        .populate("owner")
+        .populate({
             path: "replies",
             populate: {
                 path: "owner",

@@ -6,6 +6,7 @@ import { GitHubAuthButton } from "../button";
 import CommentCard from "./CommentCard";
 import CommentForm from "./CommentForm";
 import ConfirmModal from "./ConfirmModal";
+import PageNavigator from "./PageNavigator";
 
 interface Props {
   belongsTo?: string;
@@ -20,6 +21,7 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [commentToDelete, setCommentToDelete] =
     useState<CommentResponse | null>(null);
+  const [reachedEnd, setReachedEnd] = useState(false);
 
   const userProfile = useAuth();
 
@@ -183,10 +185,27 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
         `/api/comment/all?pageNo=${pageNo}&limit=${limit}`
       );
 
+      if (!data.comments.length) {
+        currentPageNo -= 1;
+        return setReachedEnd(true);
+      }
+
       setComments(data.comments);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleOnNextClick = () => {
+    if (reachedEnd) return;
+    currentPageNo += 1;
+    fetchAllComments(currentPageNo);
+  };
+  const handleOnPrevClick = () => {
+    if (currentPageNo <= 0) return;
+    if (reachedEnd) setReachedEnd(false);
+    currentPageNo -= 1;
+    fetchAllComments(currentPageNo);
   };
 
   useEffect(() => {
@@ -207,7 +226,11 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
   return (
     <div className="py-20 space-y-4">
       {userProfile ? (
-        <CommentForm title="Add Comment" onSubmit={handleNewCommentSubmit} />
+        <CommentForm
+          visible={!fetchAll}
+          title="Add Comment"
+          onSubmit={handleNewCommentSubmit}
+        />
       ) : (
         <div className="flex flex-col items-end space-y-2">
           <h3 className="text-secondary-dark text-xl font-semibold">
@@ -261,6 +284,15 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
           </div>
         );
       })}
+
+      {fetchAll ? (
+        <div className="py-10 flex justify-end">
+          <PageNavigator
+            onNextClick={handleOnNextClick}
+            onPrevClick={handleOnPrevClick}
+          />
+        </div>
+      ) : null}
 
       <ConfirmModal
         visible={showConfirmModal}
