@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { isAdmin } from "../../../lib/utils";
+import { isAdmin, isAuth } from "../../../lib/utils";
 import User from "../../../models/User";
 
 const handler: NextApiHandler = async (req, res) => {
@@ -23,15 +23,19 @@ const getLatestUsers: NextApiHandler = async (req, res) => {
         .limit(parseInt(limit))
         .select("name email avatar provider")
 
-    const users = results.map(({ _id, name, email, avatar, provider }) => ({
+    const users = results.map(({ _id, name, email, avatar, provider, twitter, facebook }) => ({
         id: _id,
         name,
         email,
         avatar,
-        provider
+        provider,
+        twitter,
+        facebook
     }))
 
     res.json({ users })
 }
+
+
 
 export default handler;

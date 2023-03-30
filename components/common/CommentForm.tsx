@@ -29,6 +29,7 @@ const CommentForm: FC<Props> = ({
 
       onSubmit(value);
     }
+    editor?.commands.clearContent(true);
   };
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const CommentForm: FC<Props> = ({
         className="min-h-[200px] border border-secondary-dark rounded p-2"
         editor={editor}
       />
-      <div className="flex justify-end py-3">
+      <div className="sm:flex justify-end py-3">
         <div className="flex space-x-4">
           <ActionButton busy={busy} title="Submit" onClick={handleSubmit} />
 

@@ -40,6 +40,12 @@ const UserNav: FC<Props> = (props): JSX.Element => {
             router.push("/admin");
           },
         },
+        {
+          label: "Profile",
+          onClick() {
+            router.push("/admin/myprofile");
+          },
+        },
         ...defaultOptions,
       ]
     : defaultOptions;
@@ -48,8 +54,8 @@ const UserNav: FC<Props> = (props): JSX.Element => {
     <div className="flex items-center justify-between bg-primary-dark p-3">
       <Link href="/">
         <div className="flex space-x-2 text-highlight-dark items-center">
-          <Logo className="fill-highlight-dark" />
-          <span className="text-xl font-semibold">{APP_NAME}</span>
+          <Logo className="fill-highlight-dark md:w-8 md:h-8 w-5 h-5" />
+          <span className="md:text-xl font-semibold">{APP_NAME}</span>
         </div>
       </Link>
       <div className="flex items-center space-x-5">
@@ -62,7 +68,13 @@ const UserNav: FC<Props> = (props): JSX.Element => {
         {isAuth ? (
           <DropdownOptions
             options={dropDownOptions}
-            head={<ProfileHead nameInitial="M" lightOnly />}
+            head={
+              <ProfileHead
+                nameInitial={profile?.name[0].toUpperCase()}
+                avatar={profile?.avatar}
+                lightOnly
+              />
+            }
           />
         ) : (
           <GitHubAuthButton lightOnly />

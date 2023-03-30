@@ -78,7 +78,7 @@ export const formatComment = (
         likes: comment.likes.length,
         chiefComment: comment?.chiefComment || false,
         createdAt: comment.createdAt?.toString(),
-        owner: { id: owner._id, name: owner.name, avatar: owner.avatar },
+        owner: { id: owner?._id, name: owner?.name, avatar: owner?.avatar },
         repliedTo: comment?.repliedTo?.toString(),
         likedByOwner: user ? getLikedByOwner(comment.likes, user) : false,
     }

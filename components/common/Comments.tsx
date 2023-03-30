@@ -21,7 +21,11 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [commentToDelete, setCommentToDelete] =
     useState<CommentResponse | null>(null);
+  const [selectedComment, setSelectedComment] =
+    useState<CommentResponse | null>(null);
   const [reachedEnd, setReachedEnd] = useState(false);
+  const [busyCommentLike, setBusyCommentLike] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const userProfile = useAuth();
 
@@ -121,12 +125,18 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
   };
 
   const handleNewCommentSubmit = async (content: string) => {
-    const newComment = await axios
-      .post("/api/comment", { content, belongsTo })
-      .then(({ data }) => data.comment)
-      .catch((err) => console.log(err));
-    if (newComment && comments) setComments([...comments, newComment]);
-    else setComments([newComment]);
+    setSubmitting(true);
+    try {
+      const newComment = await axios
+        .post("/api/comment", { content, belongsTo })
+        .then(({ data }) => data.comment)
+        .catch((err) => console.log(err));
+      if (newComment && comments) setComments([...comments, newComment]);
+      else setComments([newComment]);
+    } catch (error) {
+      console.log(error);
+    }
+    setSubmitting(false);
   };
 
   const handleReplySubmit = (replyComment: {
@@ -171,10 +181,20 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
   };
 
   const handleOnLikeClick = (comment: CommentResponse) => {
+    setBusyCommentLike(true);
+    setSelectedComment(comment);
     axios
       .post("/api/comment/update-like", { commentId: comment.id })
-      .then(({ data }) => updateLikedComments(data.comment))
-      .catch((err) => console.log(err));
+      .then(({ data }) => {
+        updateLikedComments(data.comment);
+        setBusyCommentLike(false);
+        setSelectedComment(null);
+      })
+      .catch((err) => {
+        console.log(err);
+        setBusyCommentLike(false);
+        setSelectedComment(null);
+      });
   };
 
   // fetching all comments
@@ -230,6 +250,7 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
           visible={!fetchAll}
           title="Add Comment"
           onSubmit={handleNewCommentSubmit}
+          busy={submitting}
         />
       ) : (
         <div className="flex flex-col items-end space-y-2">
@@ -255,6 +276,8 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
               }}
               onDeleteClick={() => handleOnDeleteClick(comment)}
               onLikeClicked={() => handleOnLikeClick(comment)}
+              busy={selectedComment?.id === comment.id && busyCommentLike}
+              selected={selectedComment?.id === comment.id}
             />
 
             {replies?.length ? (
@@ -276,6 +299,8 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
                       }}
                       onDeleteClick={() => handleOnDeleteClick(reply)}
                       onLikeClicked={() => handleOnLikeClick(reply)}
+                      busy={selectedComment?.id === reply.id && busyCommentLike}
+                      selected={selectedComment?.id === comment.id}
                     />
                   );
                 })}

@@ -23,6 +23,15 @@ module.exports = {
       transitionProperty: {
         width: "width",
       },
+      keyframes: {
+        wiggle: {
+          "0%, 100%": { transform: "rotate(-30deg)" },
+          "50%": { transform: "rotate(60deg)" },
+        },
+      },
+      animation: {
+        wiggle: "wiggle 4s ease-in-out infinite",
+      },
     },
     backgroundImage: {
       "png-pattern": "url('/empty-bg.jpg')",

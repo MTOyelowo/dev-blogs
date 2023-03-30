@@ -22,6 +22,8 @@ export interface UserProfile {
     email: string;
     avatar: string | undefined;
     role: "user" | "admin";
+    twitter: string | undefined;
+    facebook: string | undefined
 }
 
 export type replyComments = CommentResponse[];

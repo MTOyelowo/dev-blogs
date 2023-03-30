@@ -30,6 +30,8 @@ export const authOptions: NextAuthOptions = {
                     name: profile.name || profile.login,
                     avatar: profile.avatar_url,
                     role: "user",
+                    twitter: "",
+                    facebook: "",
                 };
                 // store new user inside the db
                 if (!oldUser) {
@@ -63,6 +65,8 @@ export const authOptions: NextAuthOptions = {
                 email: user.email,
                 avatar: user.avatar,
                 role: user.role,
+                twitter: user.twitter,
+                facebook: user.facebook,
             } as any
             return session;
 

@@ -20,6 +20,12 @@ const AdminSecondaryNav: FC<Props> = (props): JSX.Element => {
       onClick: navigateToCreateNewPost,
     },
     {
+      label: "Profile",
+      onClick() {
+        router.push("/admin/myprofile");
+      },
+    },
+    {
       label: "Change theme",
       onClick: toggleTheme,
     },
